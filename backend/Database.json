@@ -1,0 +1,158 @@
+[
+    {
+        "author": "Gabriel Garcia Marquez",
+        "borrowed": true,
+        "isbn": 9781400034686,
+        "title": "One Hundred Years of Solitude"
+    },
+    {
+        "author": "Jane Austen",
+        "borrowed": true,
+        "isbn": 9780141439518,
+        "title": "Pride and Prejudice"
+    },
+    {
+        "author": "Fyodor Dostoevsky",
+        "borrowed": false,
+        "isbn": 9780679734500,
+        "title": "Crime and Punishment"
+    },
+    {
+        "author": "Virginia Woolf",
+        "borrowed": false,
+        "isbn": 9780156907392,
+        "title": "Mrs. Dalloway"
+    },
+    {
+        "author": "Ernest Hemingway",
+        "borrowed": true,
+        "isbn": 9780684801469,
+        "title": "The Old Man and the Sea"
+    },
+    {
+        "author": "Toni Morrison",
+        "borrowed": false,
+        "isbn": 9781400033429,
+        "title": "Beloved"
+    },
+    {
+        "author": "Leo Tolstoy",
+        "borrowed": false,
+        "isbn": 9780140449136,
+        "title": "War and Peace"
+    },
+    {
+        "author": "Harper Lee",
+        "borrowed": true,
+        "isbn": 9780061120084,
+        "title": "To Kill a Mockingbird"
+    },
+    {
+        "author": "J.R.R. Tolkien",
+        "borrowed": false,
+        "isbn": 9780618260584,
+        "title": "The Hobbit"
+    },
+    {
+        "author": "George Orwell",
+        "borrowed": true,
+        "isbn": 9780451524935,
+        "title": "1984"
+    },
+    {
+        "author": "Charles Dickens",
+        "borrowed": false,
+        "isbn": 9780141439600,
+        "title": "Great Expectations"
+    },
+    {
+        "author": "J.K. Rowling",
+        "borrowed": false,
+        "isbn": 9780439554930,
+        "title": "Harry Potter and the Sorcerer's Stone"
+    },
+    {
+        "author": "Ernest Hemingway",
+        "borrowed": false,
+        "isbn": 9780684830490,
+        "title": "For Whom the Bell Tolls"
+    },
+    {
+        "author": "Margaret Atwood",
+        "borrowed": true,
+        "isbn": 9780385472084,
+        "title": "The Handmaid's Tale"
+    },
+    {
+        "author": "Herman Melville",
+        "borrowed": false,
+        "isbn": 9780142437247,
+        "title": "Moby-Dick"
+    },
+    {
+        "author": "Jules Verne",
+        "borrowed": false,
+        "isbn": 9780140449068,
+        "title": "Twenty Thousand Leagues Under the Sea"
+    },
+    {
+        "author": "Albert Camus",
+        "borrowed": true,
+        "isbn": 9780679720206,
+        "title": "The Stranger"
+    },
+    {
+        "author": "John Steinbeck",
+        "borrowed": false,
+        "isbn": 9780140177398,
+        "title": "The Grapes of Wrath"
+    },
+    {
+        "author": "Aldous Huxley",
+        "borrowed": false,
+        "isbn": 9780060929879,
+        "title": "Brave New World"
+    },
+    {
+        "author": "Kazuo Ishiguro",
+        "borrowed": true,
+        "isbn": 9780571332753,
+        "title": "Never Let Me Go"
+    },
+    {
+        "author": "Ray Bradbury",
+        "borrowed": false,
+        "isbn": 9781451673319,
+        "title": "Fahrenheit 451"
+    },
+    {
+        "author": "Homer",
+        "borrowed": false,
+        "isbn": 9780140445923,
+        "title": "The Odyssey"
+    },
+    {
+        "author": "Roald Dahl",
+        "borrowed": true,
+        "isbn": 9780142410363,
+        "title": "Charlie and the Chocolate Factory"
+    },
+    {
+        "author": "Chinua Achebe",
+        "borrowed": false,
+        "isbn": 9780385474545,
+        "title": "Things Fall Apart"
+    },
+    {
+        "author": "Stephen King",
+        "borrowed": false,
+        "isbn": 9780451169532,
+        "title": "The Shining"
+    },
+    {
+        "author": "F. Scott Fitzgerald",
+        "borrowed": true,
+        "isbn": 9780743273565,
+        "title": "The Great Gatsby"
+    }
+]
