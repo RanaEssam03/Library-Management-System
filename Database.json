@@ -1,7 +1,7 @@
 [
     {
         "author": "Gabriel Garcia Marquez",
-        "borrowed": false,
+        "borrowed": true,
         "isbn": 9781400034686,
         "title": "One Hundred Years of Solitude"
     },
