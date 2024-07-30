@@ -1,0 +1,77 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define environment variables
+        AWS_REGION = 'us-east-1'
+        KUBECONFIG_PATH = '/home/jenkins/.kube/config'
+        CLUSTER_NAME = 'eks_cluster'
+        CONTEXT_NAME = 'arn:aws:eks:us-east-1:123456789012:cluster/eks_cluster' // Change this to your actual context ARN
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/RanaEssam03/Library-Management-System'
+            }
+        }
+
+        stage('Check and Switch Context') {
+            steps {
+                script {
+                    def currentContext = sh(script: 'kubectl config current-context', returnStdout: true).trim()
+                    if (currentContext != "${CONTEXT_NAME}") {
+                        echo "Switching context to ${CONTEXT_NAME}"
+                        sh "kubectl config use-context ${CONTEXT_NAME}"
+                    } else {
+                        echo "Current kubectl context (${currentContext}) matches the required context (${CONTEXT_NAME})."
+                    }
+                }
+            }
+        }
+
+        stage('Apply Kubernetes Manifests for Frontend') {
+            steps {
+                script {
+                    // Define paths to your manifest files
+                    def deploymentFile = './deployment_configurations/frontend_deployment.yaml'
+    
+                    def serviceFile = './deployment_configurations/frontend_service.yaml'
+                
+                    // Apply the deployment
+                    sh "kubectl apply -f ${deploymentFileFrontend}"
+                    
+                    // Apply the service
+                    sh "kubectl apply -f ${serviceFileFrontend}"
+                }
+            }
+        }
+
+        stage('Apply Kubernetes Manifests for backend') {
+            steps {
+                script {
+                    // Define paths to your manifest files
+                    def deploymentFile = './deployment_configurations/backend_deployment.yaml'
+            
+                    def serviceFile = './deployment_configurations/backend_service.yaml'
+
+                
+                    // Apply the deployment
+                    sh "kubectl apply -f ${deploymentFile}"
+                    
+                    // Apply the service
+                    sh "kubectl apply -f ${serviceFile}"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment and Service applied successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
