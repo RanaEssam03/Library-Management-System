@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: flask-app-service
-  namespace: main
+  # namespace: main
   # namespace: librarymanagementsystem  # Specify the namespace
 spec:
   type: NodePort  # Exposes the service on each node's IP at a static port
   ports:
-    - port: 80        # Port exposed on the service
+    - port: 81        # Port exposed on the service
       targetPort: 5000  # Port on the container (Flask app)
       nodePort: 30000   # A different NodePort accessible on each Kubernetes node
   selector:

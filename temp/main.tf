@@ -385,13 +385,19 @@ resource "aws_security_group" "eks" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
    ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+    ingress {
+    from_port   = 5173
+    to_port     = 5173
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   egress {
     from_port   = 0
@@ -507,4 +513,3 @@ data "aws_eks_cluster_auth" "main" {
 #   token                  = data.aws_eks_cluster_auth.main.token
 #   cluster_ca_certificate = base64decode(aws_eks_cluster.main.certificate_authority[0].data)
 # }
-

@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend-service
-  namespace: librarymanagementsystem
+  # namespace: librarymanagementsystem
 spec:
   selector:
     app: library-system
   ports:
     - protocol: TCP
-      port: 5173
+      port: 80
       targetPort: 5173
   type: LoadBalancer
