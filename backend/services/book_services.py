@@ -12,7 +12,8 @@ bookController = BookController(bookRepo=bookRepo)
 
 # Initializing Flask application
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE"], "allow_headers": ["Content-Type"]}})
+
 
 # Route for the root endpoint
 @app.route("/")
