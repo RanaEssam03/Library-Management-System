@@ -10,20 +10,20 @@ import 'react-toastify/dist/ReactToastify.css';
 const queryClient = new QueryClient();
 
 const fetchBooks = async () => {
-    const res = await axios.get('http://localhost:5000/get-all-books');
+    const res = await axios.get('http://flask-app-service.default.svc.cluster.local:81/get-all-books');
     return res.data;
 };
 
 const deleteBook = async (id) => {
-    await axios.delete(`http://localhost:5000/delete-book/${id}`);
+    await axios.delete(`http://flask-app-service.default.svc.cluster.local:81/delete-book/${id}`);
 };
 
 const borrowBook = async (id) => {
-    await axios.put(`http://localhost:5000/borrow-book/${id}`);
+    await axios.put(`http://flask-app-service.default.svc.cluster.local:81/borrow-book/${id}`);
 };
 
 const addBook = async (newBook) => {
-    await axios.post('http://localhost:5000/add-book', newBook);
+    await axios.post('http://flask-app-service.default.svc.cluster.local:81/add-book', newBook);
 };
 
 const BookCard = ({ book, onDelete, onBorrow }) => {
