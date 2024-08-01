@@ -5,25 +5,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ToastContainer, toast } from 'react-toastify';
 import Modal from 'react-modal';
 import 'react-toastify/dist/ReactToastify.css';
+import { BaseURL } from '../API/API.JS';
 
 // Create a client
 const queryClient = new QueryClient();
 
 const fetchBooks = async () => {
-    const res = await axios.get('http://flask-app-service.default.svc.cluster.local:81/get-all-books');
+    const res = await axios.get(`${BaseURL}/get-all-books`);
     return res.data;
 };
 
 const deleteBook = async (id) => {
-    await axios.delete(`http://flask-app-service.default.svc.cluster.local:81/delete-book/${id}`);
+    await axios.delete(`${BaseURL}/delete-book/${id}`);
 };
 
 const borrowBook = async (id) => {
-    await axios.put(`http://flask-app-service.default.svc.cluster.local:81/borrow-book/${id}`);
+    await axios.put(`${BaseURL}/borrow-book/${id}`);
 };
 
 const addBook = async (newBook) => {
-    await axios.post('http://flask-app-service.default.svc.cluster.local:81/add-book', newBook);
+    await axios.post(`${BaseURL}/add-book`, newBook);
 };
 
 const BookCard = ({ book, onDelete, onBorrow }) => {

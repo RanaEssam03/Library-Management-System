@@ -1,1 +1,1 @@
-export const BaseURL="http://flask-app-service.default.svc.cluster.local:81" ;
+export const BaseURL="http://flask-app-service" ;
