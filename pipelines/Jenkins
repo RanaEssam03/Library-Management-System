@@ -1,24 +1,26 @@
 pipeline {
-    agent any
+     agent { label 'local-agent' }
 
     environment {
         DOCKER_REGISTRY = 'ranaessam'
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials-id' // Jenkins credentials ID for Docker Hub
         GIT_REPO_URL = 'https://github.com/RanaEssam03/Library-Management-System' // Replace with your GitHub repo URL
+        AWS_REGION = 'us-east-1' // AWS Region
+        EKS_CLUSTER_NAME = 'main-cluster' // EKS Cluster Name
     }
 
     stages {
         stage('Checkout') {
             steps {
+                sh 'git config --global http.postBuffer 524288000'
                 // Checkout the source code from GitHub
-                sh 'git clone $GIT_REPO_URL'
+                sh "git clone $GIT_REPO_URL"
             }
         }
 
         stage('Build Docker Images') {
             steps {
                 script {
-                  
                     sh 'cd Library-Management-System && docker-compose --verbose build'
                 }
             }
@@ -27,42 +29,50 @@ pipeline {
         stage('Tag and Push Images') {
             steps {
                 script {
-                    sh'docker images'
-                    // Log in to Docker Hub
+                    sh 'docker images'
+                    // Log in to Docker Hub and push images
                     docker.withRegistry("https://index.docker.io/v1/", DOCKER_CREDENTIALS_ID) {
                         // Tag and push backend image
-                        sh 'docker tag library-management-system_backend:latest $DOCKER_REGISTRY/library-management-system_backend:latest'
-                        sh 'docker push $DOCKER_REGISTRY/library-management-system_backend:latest'
+                        sh "docker tag library-management-system_backend:latest $DOCKER_REGISTRY/library-management-system_backend:latest"
+                        sh "docker push $DOCKER_REGISTRY/library-management-system_backend:latest"
 
                         // Tag and push frontend image
-                        sh 'docker tag library-management-system_frontend:latest $DOCKER_REGISTRY/library-management-system_frontend:latest'
-                        sh 'docker push $DOCKER_REGISTRY/library-management-system_frontend:latest'
+                        sh "docker tag library-management-system_frontend:latest $DOCKER_REGISTRY/library-management-system_frontend:latest"
+                        sh "docker push $DOCKER_REGISTRY/library-management-system_frontend:latest"
                     }
                 }
             }
         }
 
-        //   stage('Switch Context') {
-        //     steps {
-        //         script {
-        //           sh ' aws eks update-kubeconfig --region us-east-1 --name main-cluster'
-        //         }
-        //     }
-        // }
-
-       stage('Deployment') {
+        stage('Setup AWS Credentials') {
             steps {
-                script {
-                             // Define paths to your manifest files
-                sh "cd Library-Management-System/deployment_configurations/ && kubectl create -f . "
-           
-               
+                withCredentials([aws(credentialsId: 'aws-credentials-id', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    script {
+                        // Update kubeconfig for EKS
+                        sh "aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME"
+                    }
                 }
             }
         }
 
+        stage('Deployment') {
+            steps {
+                script {
+                    // Write the Kubernetes config to a file
+                    writeFile file: 'kubeconfig', text: '''
+                    apiVersion: client.authentication.k8s.io/v1
+                    kind: ExecCredential
+                    metadata:
+                      name: my-exec-credential
+                    '''
+                    
+                    // Apply Kubernetes configurations
+                    sh "cd Library-Management-System/deployment_configurations && kubectl apply -f ."
+                }
+            }
+        }
     }
-    
+
     post {
         always {
             // Clean workspace
