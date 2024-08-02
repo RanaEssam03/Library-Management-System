@@ -11,3 +11,17 @@ spec:
   selector:
     app: flask-app  # Must match the labels in your Deployment
     
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: backend-service
+#   # namespace: librarymanagementsystem
+# spec:
+#   selector:
+#     app: library-system
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 5000
+#   type: LoadBalancer
+  

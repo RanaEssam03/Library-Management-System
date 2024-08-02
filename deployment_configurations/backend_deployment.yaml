@@ -12,8 +12,6 @@ spec:
       labels:
         app: flask-app
     spec:
-      nodeSelector:
-        disktype: ssd 
       containers:
         - name: flask-app
           image: ranaessam/library-management-system_backend:latest
@@ -22,6 +20,7 @@ spec:
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
+
       #     volumeMounts:
       #       - mountPath: /app  # Adjust to match the path inside the container
       #         name: flask-app-volume

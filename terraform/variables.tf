@@ -1,9 +1,21 @@
-variable "aws_region" {
-  description = "The AWS region to create resources in."
-  default     = "us-east-1"
+# Variable for User ARNs
+variable "user_arns" {
+  description = "List of IAM User ARNs allowed to assume the role"
+  type        = list(string)
+  default     = [
+    "arn:aws:iam::637423483309:user/basma",
+    "arn:aws:iam::637423483309:user/gamila",
+    "arn:aws:iam::637423483309:user/farah"
+  ]
 }
 
-variable "cluster_name" {
-  description = "The name of the EKS cluster."
-  default     = "main-eks-cluster"
+# Tags Variable
+variable "tags" {
+  description = "Tags to apply to resources"
+  type        = map(string)
+  default     = {
+    Environment = "Production"
+    Team        = "Team1"
+  }
 }
+

@@ -1,7 +1,8 @@
-# Dockerfile for Flask App
-
 # Use the official Python image from the Docker Hub
 FROM python:3.9-slim
+
+# Install curl and other necessary packages
+RUN apt-get update && apt-get install -y curl && apt-get clean
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
