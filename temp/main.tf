@@ -239,6 +239,32 @@ data "aws_eks_cluster_auth" "main" {
   name = aws_eks_cluster.main.name
 }
 
+data "aws_iam_policy_document" "eks_full_access" {
+  statement {
+    effect  = "Allow"
+    actions = [
+      "eks:DescribeCluster",
+      "eks:ListClusters",
+      "eks:ListNodegroups",
+      "eks:ListFargateProfiles",
+      "eks:ListUpdates",
+      "eks:DescribeNodegroup",
+      "eks:DescribeFargateProfile",
+      "eks:DescribeUpdate",
+      "eks:UpdateNodegroupConfig",
+      "eks:UpdateNodegroupVersion",
+      "eks:CreateNodegroup",
+      "eks:CreateFargateProfile",
+      "eks:DeleteNodegroup",
+      "eks:DeleteFargateProfile",
+      "eks:TagResource",
+      "eks:UntagResource"
+    ]
+    resources = ["*"]
+  }
+}
+
+
 # IAM Policy Document for Trusted Account and Users
 data "aws_iam_policy_document" "trusted_account" {
   statement {
@@ -259,6 +285,11 @@ resource "aws_iam_role" "master_access_team_1" {
   tags               = var.tags
 }
 
+resource "aws_iam_role_policy" "master_access_policy" {
+  name   = "masterAccessPolicy"
+  role   = aws_iam_role.master_access_team_1.id
+  policy = data.aws_iam_policy_document.eks_full_access.json
+}
 
 # Variable for User ARNs
 variable "user_arns" {
