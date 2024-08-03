@@ -1,4 +1,16 @@
 
+terraform {
+  backend "s3" {
+    bucket         = "teamm01"
+    key            = "terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    # Optionally configure DynamoDB table for state locking
+    dynamodb_table = "terraform-locks"
+  }
+}
+
+
 provider "aws" {
   region = "us-east-1"
 }
