@@ -7,8 +7,8 @@
 3. [Docker Compose Configuration](#docker-compose-configuration)
 4. [Deployment Script](#deployment-script)
 5. [Terraform Configuration for AWS EKS Cluster](#terraform-configuration-for-aws-eks-cluster)
-6. [Jenkins Pipeline](jenkins-pipeline)
-7. [Running the Jenkins Pipeline](running-the-jenkins-pipeline)
+6. [Jenkins Pipeline](#jenkins-pipeline)
+7. [Running the Jenkins Pipeline](#running-the-jenkins-pipeline)
   
 ## Project Overview
 
