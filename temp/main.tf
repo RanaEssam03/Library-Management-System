@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket         = "teamm01"
-    key            = "terraform.tfstate"
+    key            = "state/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
     # Optionally configure DynamoDB table for state locking
@@ -22,55 +22,55 @@ provider "kubernetes" {
 }
 
 # Create a VPC
-resource "aws_vpc" "main" {
+resource "aws_vpc" "Team1" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
 
   tags = {
-    Name = "main-vpc"
+    Name = "Team1-vpc"
   }
 }
 
 # Create a public subnet
-resource "aws_subnet" "rana_first_subnet" {
-  vpc_id                  = aws_vpc.main.id
+resource "aws_subnet" "team1_first_subnet" {
+  vpc_id                  = aws_vpc.Team1.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "main-subnet"
+    Name = "team1-subnet"
   }
 }
 
 # Create a private subnet
-resource "aws_subnet" "rana_second_subnet" {
-  vpc_id            = aws_vpc.main.id
+resource "aws_subnet" "team1_second_subnet" {
+  vpc_id            = aws_vpc.Team1.id
   cidr_block        = "10.0.2.0/24"
   availability_zone = "us-east-1b"
 
   tags = {
-    Name = "second-subnet"
+    Name = "team1-subnet"
   }
 }
 
 # Create an internet gateway
-resource "aws_internet_gateway" "main" {
-  vpc_id = aws_vpc.main.id
+resource "aws_internet_gateway" "Team1" {
+  vpc_id = aws_vpc.Team1.id
 
   tags = {
-    Name = "main-gateway"
+    Name = "team1-gateway"
   }
 }
 
 # Create a route table for the public subnet
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.Team1.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.main.id
+    gateway_id = aws_internet_gateway.Team1.id
   }
 
   tags = {
@@ -80,7 +80,7 @@ resource "aws_route_table" "public" {
 
 # Associate the route table with the public subnet
 resource "aws_route_table_association" "public_subnet" {
-  subnet_id      = aws_subnet.rana_first_subnet.id
+  subnet_id      = aws_subnet.team1_first_subnet.id
   route_table_id = aws_route_table.public.id
 }
 
@@ -90,22 +90,22 @@ resource "aws_eip" "nat" {
 }
 
 # Create a NAT Gateway
-resource "aws_nat_gateway" "main" {
+resource "aws_nat_gateway" "Team1" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.rana_first_subnet.id
+  subnet_id     = aws_subnet.team1_first_subnet.id
 
   tags = {
-    Name = "main-nat-gateway"
+    Name = "team1-nat-gateway"
   }
 }
 
 # Create a route table for the private subnet
 resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.Team1.id
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.main.id
+    nat_gateway_id = aws_nat_gateway.Team1.id
   }
 
   tags = {
@@ -115,13 +115,13 @@ resource "aws_route_table" "private" {
 
 # Associate the route table with the private subnet
 resource "aws_route_table_association" "private_subnet" {
-  subnet_id      = aws_subnet.rana_second_subnet.id
+  subnet_id      = aws_subnet.team1_second_subnet.id
   route_table_id = aws_route_table.private.id
 }
 
 # Create a security group
 resource "aws_security_group" "eks" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.Team1.id
 
   ingress {
     from_port   = 443
@@ -157,7 +157,7 @@ resource "aws_security_group" "eks" {
 
 # Create an IAM role for EKS
 resource "aws_iam_role" "eks" {
-  name = "eks-cluster-role-rana"
+  name = "eks-cluster-role-team1"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -213,14 +213,14 @@ resource "aws_iam_role_policy_attachment" "eks_node_group_cni" {
 
 
 # Create EKS Cluster
-resource "aws_eks_cluster" "main" {
-  name     = "main-cluster"
+resource "aws_eks_cluster" "Team1" {
+  name     = "Team1-cluster"
   role_arn  = aws_iam_role.eks.arn
 
   vpc_config {
     subnet_ids = [
-      aws_subnet.rana_first_subnet.id,
-      aws_subnet.rana_second_subnet.id,
+      aws_subnet.team1_first_subnet.id,
+      aws_subnet.team1_second_subnet.id,
     ]
     security_group_ids = [aws_security_group.eks.id]
   }
@@ -231,24 +231,24 @@ resource "aws_eks_cluster" "main" {
 }
 
 # Create EKS Node Group
-resource "aws_eks_node_group" "main" {
-  cluster_name    = aws_eks_cluster.main.name
-  node_group_name = "main-node-group"
+resource "aws_eks_node_group" "Team1" {
+  cluster_name    = aws_eks_cluster.Team1.name
+  node_group_name = "Team1-node-group"
   node_role_arn   = aws_iam_role.eks_node_group.arn
   subnet_ids       = [
-    aws_subnet.rana_first_subnet.id,
-    aws_subnet.rana_second_subnet.id,
+    aws_subnet.team1_first_subnet.id,
+    aws_subnet.team1_second_subnet.id,
   ]
   scaling_config {
-    desired_size = 2
+    desired_size = 1
     max_size     = 3
     min_size     = 1
   }
 }
 #_________________
 # Fetch EKS Cluster Auth
-data "aws_eks_cluster_auth" "main" {
-  name = aws_eks_cluster.main.name
+data "aws_eks_cluster_auth" "Team1" {
+  name = aws_eks_cluster.Team1.name
 }
 
 data "aws_iam_policy_document" "eks_full_access" {
@@ -327,9 +327,3 @@ variable "tags" {
 
 
 
-# # Kubernetes provider configuration
-# provider "kubernetes" {
-#   host                   = aws_eks_cluster.main.endpoint
-#   token                  = data.aws_eks_cluster_auth.main.token
-#   cluster_ca_certificate = base64decode(aws_eks_cluster.main.certificate_authority[0].data)
-# }
