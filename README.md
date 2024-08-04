@@ -12,7 +12,7 @@
   
 ## Project Overview
 
-This project is a full-stack web application that utilizes React for the frontend and Flask for the backend. The application is containerized using Docker, and we use `docker-compose` to manage multi-container deployments. Additionally, we provide a `deploy.sh` script to automate the deployment process.
+The Library Management System is a full-stack web application designed to streamline the management of library operations. This project integrates modern web technologies and cloud infrastructure to provide an efficient, scalable solution for managing library resources. It features a React frontend and a Flask backend, both containerized using Docker, with deployment and orchestration managed through AWS EKS.
 
 ## Tools and Technologies
 
