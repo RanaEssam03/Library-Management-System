@@ -311,10 +311,12 @@ The Jenkins pipeline automates the process of building, tagging, pushing Docker 
         steps {
             script {
                 // Initialize Terraform
-                sh 'terraform init'
-  
-                // Apply the Terraform configuration
-                sh 'terraform apply -auto-approve'
+
+                sh """ 
+                cd cd Library-Management-System/temp
+                terraform init
+
+                terraform apply -auto-approve"""
             }
         }
     }
@@ -328,6 +330,7 @@ The Jenkins pipeline automates the process of building, tagging, pushing Docker 
             script {
                  // Apply Kubernetes configurations
                         sh """
+                        cd Library-Management-System/deployment_configurations
                             kubectl apply -f . --validate=false
                             kubectl get services
                         """
