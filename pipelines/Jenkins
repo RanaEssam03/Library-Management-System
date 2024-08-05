@@ -76,6 +76,8 @@ pipeline {
                     def kubeconfigPath = "${WORKSPACE}/.kube/config"
                      // Apply Kubernetes configurations
                         sh """
+                            kubectl delete deployments --all --all-namespaces
+                            kubectl delete services --all --all-namespaces
                             cd Library-Management-System/deployment_configurations && kubectl apply -f . --validate=false --v=8
                             kubectl get services
                         """
