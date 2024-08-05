@@ -202,7 +202,7 @@ The configuration includes the following components:
 ### Terraform Backend
 
 - **Bucket**: `teamm01`
-- **Key**: `terraform.tfstate`
+- **Key**: `state/terraform.tfstate`
 - **Region**: `us-east-1`
 
 
