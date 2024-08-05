@@ -229,13 +229,23 @@ The configuration includes the following components:
 ## Usage
 
 1. Clone the repository containing this Terraform configuration.
-2. Initialize Terraform:
+
+2. Initialize Terraform after move to its file:
 
    ```bash
-   cd terraform 
+   cd terraform
    terraform init
    ```
+3. Plan changes
 
+    ```bash
+    terraform plan
+    ```
+4. Apply changes
+
+    ```bash
+    terraform apply
+    ```
 
 
 ## Jenkins Pipeline
