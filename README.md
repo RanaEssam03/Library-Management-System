@@ -174,6 +174,7 @@ The configuration includes the following components:
 2. Initialize Terraform:
 
    ```bash
+   cd terraform 
    terraform init
    ```
 
