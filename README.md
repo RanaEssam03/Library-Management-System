@@ -10,8 +10,9 @@
 6. [Jenkins Pipeline](#jenkins-pipeline)
 7. [Running the Jenkins Pipeline](#running-the-jenkins-pipeline)
 8. [Monitoring with Grafana and Prometheus](monitoring-with-grafana-and-prometheus)
-9. [Notes](#note)
-10. [Conclusion](#conclusion)
+9. [Kubernetes Access Control](#kubernetes-access-control)
+10. [Notes](#note)
+11. [Conclusion](#conclusion)
 
   
 ## Project Overview
@@ -361,6 +362,13 @@ The Jenkins pipeline automates the process of building, tagging, pushing Docker 
 
 Monitoring is crucial for maintaining the health and performance of the Library Management System. Grafana and Prometheus are used to collect, visualize, and analyze metrics from your application and infrastructure.
 
+
+## Kubernetes Access Control
+Effective management of Kubernetes access control involves defining and applying roles and permissions to ensure appropriate access to cluster resources. Follow these steps to configure and manage access control:
+
+1. Update Access Control Files: Edit the files in the `Auth` folder to define roles, role bindings, and policies. These configurations control who can access various Kubernetes resources and what actions they are permitted to perform.
+
+2. Apply Configurations: Deploy the updated access control configurations to your Kubernetes cluster using `kubectl`. This step ensures that the roles and permissions defined in your files are enforced in the cluster.
 
 
 ## Note: 
