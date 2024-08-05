@@ -9,6 +9,10 @@
 5. [Terraform Configuration for AWS EKS Cluster](#terraform-configuration-for-aws-eks-cluster)
 6. [Jenkins Pipeline](#jenkins-pipeline)
 7. [Running the Jenkins Pipeline](#running-the-jenkins-pipeline)
+8. [Monitoring with Grafana and Prometheus](monitoring-with-grafana-and-prometheus)
+9. [Notes](#note)
+10. [Conclusion](#conclusion)
+
   
 ## Project Overview
 
@@ -137,7 +141,7 @@ The configuration includes the following components:
 - **Bucket**: `teamm01`
 - **Key**: `terraform.tfstate`
 - **Region**: `us-east-1`
-- **DynamoDB Table**: `terraform-locks`
+
 
 ### AWS VPC
 
@@ -303,35 +307,19 @@ The Jenkins pipeline automates the process of building, tagging, pushing Docker 
          }
            }
    ```
-5. **Terraform Init and Apply**: Initializes Terraform and applies the configuration to create and manage infrastructure.
 
-
-    ```groovy
-        stage('Terraform Init and Apply') {
-        steps {
-            script {
-                // Initialize Terraform
-
-                sh """ 
-                cd cd Library-Management-System/temp
-                terraform init
-
-                terraform apply -auto-approve"""
-            }
-        }
-    }
-    ```
-6. **Deploy to Kubernetes**: Deploys the Docker images to the EKS cluster.
+5. **Deploy to Kubernetes**: Deploy the Docker images to the EKS cluster, ensuring all existing deployments and services are deleted beforehand.
 
 
     ```groovy
         stage('Deploy to Kubernetes') {
         steps {
             script {
-                 // Apply Kubernetes configurations
+                 // Apply Kubernetes configurations after deleting all services and deployment 
                         sh """
-                        cd Library-Management-System/deployment_configurations
-                            kubectl apply -f . --validate=false
+                         kubectl delete deployments --all --all-namespaces
+                            kubectl delete services --all --all-namespaces
+                        cd Library-Management-System/deployment_configurations && kubectl apply -f . --validate=false
                             kubectl get services
                         """
             }
@@ -359,3 +347,23 @@ The Jenkins pipeline automates the process of building, tagging, pushing Docker 
 4. Trigger the pipeline manually or set up automatic triggers (e.g., on code commits).
 
 5. Monitor the pipeline stages through the Jenkins interface to ensure that the build, push, and deployment processes complete successfully.
+
+## Monitoring with Grafana and Prometheus
+
+Monitoring is crucial for maintaining the health and performance of the Library Management System. Grafana and Prometheus are used to collect, visualize, and analyze metrics from your application and infrastructure.
+
+
+
+## Note: 
+ - Before running the pipeline, make sure to update the base URL in the frontend with the Node IP address. This ensures the React app can access the backend using the NodePort and Node IP, preventing CORS issues. ☠️☠️☠️
+
+ ## Conclusion
+
+ The Library Management System (LMS) provides a comprehensive solution for managing library operations through a modern and scalable web application. By leveraging React for the frontend and Flask for the backend, this project ensures a robust user experience and efficient handling of backend operations. Containerization with Docker and orchestration with AWS EKS further enhance the scalability and maintainability of the system.
+
+The Docker Compose configuration simplifies the local development and testing process by defining a unified environment for both the frontend and backend services. The Terraform setup ensures a reliable and repeatable deployment of the EKS cluster, managing essential infrastructure components with precision.
+
+The Jenkins pipeline automates the CI/CD process, from building Docker images to deploying them on the Kubernetes cluster, ensuring a seamless and consistent deployment workflow. Additionally, monitoring with Grafana and Prometheus provides valuable insights into the system’s performance and health, enabling proactive management and troubleshooting.
+
+By following this guide, you have a complete framework to deploy, monitor, and maintain a robust Library Management System. Regular updates and monitoring are crucial for adapting to evolving requirements and maintaining optimal performance.
+
