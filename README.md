@@ -220,11 +220,6 @@ The configuration includes the following components:
 - **Maximum Node Count**: 3
 - **Minimum Node Count**: 1
 
-### IAM User ARNs Allowed to Assume the Role
-
-- `arn:aws:iam::637423483309:user/basma`
-- `arn:aws:iam::637423483309:user/gamila`
-- `arn:aws:iam::637423483309:user/farah`
 
 ### Tags
 
