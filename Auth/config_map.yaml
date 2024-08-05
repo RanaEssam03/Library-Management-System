@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: access-config
+  namespace: default
+data:
+  users: |
+    - name: "arn:aws:iam::637423483309:user/basma"
+      role: "admin"
+    - name: "arn:aws:iam::637423483309:user/gamila"
+      role: "admin"
+    - name: "arn:aws:iam::637423483309:user/farah"
+      role: "admin"
+  description: "This ConfigMap contains access information for all users."
