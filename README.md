@@ -86,9 +86,72 @@ docker-compose down
 docker-compose logs
 ```
 
+## Deployment Script
+
+The `deploy.sh` script automates the deployment process by building Docker images, starting the containers, and cleaning up any unused images. I created this script to streamline the build and push process, allowing me to test everything thoroughly before integrating it into the CI/CD pipeline.
+
+```bash
+    #!/bin/bash
+
+    # Log in to Docker Hub
+    docker login
+
+    # Retrieve the Docker Hub username
+    DOCKER_HUB_USERNAME=$(docker info 2>/dev/null | grep -Po '(?<=Username: ).*')
+
+    # Check if the username was retrieved successfully
+    if [ -z "$DOCKER_HUB_USERNAME" ]; then
+    echo "Failed to retrieve Docker Hub username."
+    exit 1
+    fi
+
+    echo "Using Docker Hub username: $DOCKER_HUB_USERNAME"
+
+    # Define the services
+    services=("backend" "frontend")
+
+    # Remove existing images
+    for service in "${services[@]}"; do
+    image_name="$DOCKER_HUB_USERNAME/library-management-system_$service:latest"
+
+    if docker images | grep -q "$image_name"; then
+        echo "Removing existing image: $image_name"
+        docker rmi -f "$image_name"
+    fi
+    done
+
+    # Build images using docker-compose
+    docker-compose build
+
+    # Tag and push images for each service
+    for service in "${services[@]}"; do
+    # Define image name
+    image_name="$DOCKER_HUB_USERNAME/library-management-system_$service:latest"
+
+    # Tag the image
+    docker tag "library-management-system_$service:latest" "$image_name"
+
+    # Push the image to Docker Hub
+    docker push "$image_name"
+    done
+```
+
+### How to Use the Deployment Script
+
+1. Make the script executable:
+
+   ```bash
+   chmod +x deploy.sh
+   ```
+
+2. Run the script:
+   ```bash
+   ./deploy.sh
+   ```
+
 ## Terraform Configuration for AWS EKS Cluster
 
-This Terraform configuration sets up an Amazon EKS (Elastic Kubernetes Service) cluster along with the necessary VPC (Virtual Private Cloud) infrastructure, subnets, IAM roles, security groups, and other components required to run an EKS cluster on AWS.
+This Terraform configuration provisions an Amazon EKS (Elastic Kubernetes Service) cluster along with the necessary VPC (Virtual Private Cloud) infrastructure, subnets, IAM roles, security groups, and other components essential for running an EKS cluster on AWS. It was created to expedite the process of setting up the infrastructure and streamline deployment.
 
 ## Prerequisites
 
@@ -178,68 +241,7 @@ The configuration includes the following components:
    terraform init
    ```
 
-## Deployment Script
 
-The `deploy.sh` script automates the deployment process. It builds the Docker images, starts the containers, and cleans up any unused images.
-
-```bash
-    #!/bin/bash
-
-    # Log in to Docker Hub
-    docker login
-
-    # Retrieve the Docker Hub username
-    DOCKER_HUB_USERNAME=$(docker info 2>/dev/null | grep -Po '(?<=Username: ).*')
-
-    # Check if the username was retrieved successfully
-    if [ -z "$DOCKER_HUB_USERNAME" ]; then
-    echo "Failed to retrieve Docker Hub username."
-    exit 1
-    fi
-
-    echo "Using Docker Hub username: $DOCKER_HUB_USERNAME"
-
-    # Define the services
-    services=("backend" "frontend")
-
-    # Remove existing images
-    for service in "${services[@]}"; do
-    image_name="$DOCKER_HUB_USERNAME/library-management-system_$service:latest"
-
-    if docker images | grep -q "$image_name"; then
-        echo "Removing existing image: $image_name"
-        docker rmi -f "$image_name"
-    fi
-    done
-
-    # Build images using docker-compose
-    docker-compose build
-
-    # Tag and push images for each service
-    for service in "${services[@]}"; do
-    # Define image name
-    image_name="$DOCKER_HUB_USERNAME/library-management-system_$service:latest"
-
-    # Tag the image
-    docker tag "library-management-system_$service:latest" "$image_name"
-
-    # Push the image to Docker Hub
-    docker push "$image_name"
-    done
-```
-
-### How to Use the Deployment Script
-
-1. Make the script executable:
-
-   ```bash
-   chmod +x deploy.sh
-   ```
-
-2. Run the script:
-   ```bash
-   ./deploy.sh
-   ```
 
 ## Jenkins Pipeline
 
@@ -253,7 +255,7 @@ The Jenkins pipeline automates the process of building, tagging, pushing Docker 
        stage('Clean Workspace') {
        steps {
            script {
-               deleteDir() // Deletes the entire workspace
+               deleteDir() // Deletes the entire workspace 
            }
        }
    }
@@ -265,6 +267,7 @@ The Jenkins pipeline automates the process of building, tagging, pushing Docker 
    ```groovy
        stage('Clone Repository') {
        steps {
+        // Increase Git HTTP post buffer size to 500 MB to handle large pushes and prevent errors
            sh 'git config --global http.postBuffer 524288000'
            // Checkout the source code from GitHub
            sh "git clone $GIT_REPO_URL"
