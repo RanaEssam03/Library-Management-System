@@ -11,7 +11,7 @@ Our website: http://a1c051755122444a8945a242f1d9fdac-1391179287.us-east-1.elb.am
 5. [Terraform Configuration for AWS EKS Cluster](#terraform-configuration-for-aws-eks-cluster)
 6. [Jenkins Pipeline](#jenkins-pipeline)
 7. [Running the Jenkins Pipeline](#running-the-jenkins-pipeline)
-8. [Monitoring with Grafana and Prometheus](monitoring-with-grafana-and-prometheus)
+8. [Monitoring with Grafana and Prometheus](#monitoring-with-grafana-and-prometheus)
 9. [Kubernetes Access Control](#kubernetes-access-control)
 10. [Notes](#note)
 11. [Conclusion](#conclusion)
